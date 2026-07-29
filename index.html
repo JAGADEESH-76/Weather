@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aether — AI Hyperlocal Weather &amp; Decision Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="isobars" aria-hidden="true">
+  <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+    <path class="iso iso-1" d="M-100,120 C 300,40 600,220 1000,140 S 1500,60 1700,160" />
+    <path class="iso iso-2" d="M-100,280 C 350,180 650,360 1050,300 S 1500,220 1700,320" />
+    <path class="iso iso-3" d="M-100,480 C 300,400 700,560 1050,480 S 1500,420 1700,520" />
+    <path class="iso iso-4" d="M-100,700 C 350,620 650,800 1050,720 S 1500,660 1700,760" />
+  </svg>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">☍</span>
+    <div class="brand-text">
+      <span class="brand-name">Atmospredict</span>
+      <span class="brand-sub">Hyperlocal Forecast &amp; Decision Support</span>
+    </div>
+  </div>
+  <div class="station-log" id="stationLog">STATION LOG — AWAITING LOCATION</div>
+</header>
+
+<main>
+
+  <!-- HERO / SEARCH + LIVE READOUT -->
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">01 — AI Hyperlocal Weather Prediction</p>
+      <h1>Weather, resolved to<br>where you actually stand.</h1>
+      <p class="lede">Not a forecast for your city. A forecast for your coordinates — built from live station and satellite data, scored for confidence, and read out in plain language.</p>
+
+      <form id="searchForm" class="search-row" autocomplete="off">
+        <input type="text" id="locationInput" placeholder="Enter a location — e.g. Vellore, Chennai, Coimbatore" aria-label="Search location">
+        <button type="submit" id="searchBtn">Locate</button>
+        <button type="button" id="gpsBtn" title="Use current GPS location" aria-label="Use current location">⦿ GPS</button>
+      </form>
+      <div id="searchStatus" class="search-status"></div>
+    </div>
+
+    <div class="readout-card" id="readoutCard">
+      <div class="readout-top">
+        <span class="readout-place" id="readoutPlace">— — —</span>
+        <span class="readout-coords" id="readoutCoords">LAT — · LON —</span>
+      </div>
+      <div class="readout-main">
+        <span class="readout-temp" id="readoutTemp">--°</span>
+        <span class="readout-desc" id="readoutDesc">No data yet</span>
+      </div>
+      <div class="readout-grid">
+        <div class="readout-cell"><span class="cell-label">Rain prob.</span><span class="cell-value" id="cellRain">--%</span></div>
+        <div class="readout-cell"><span class="cell-label">Wind</span><span class="cell-value" id="cellWind">-- km/h</span></div>
+        <div class="readout-cell"><span class="cell-label">Humidity</span><span class="cell-value" id="cellHumidity">--%</span></div>
+        <div class="readout-cell"><span class="cell-label">Feels like</span><span class="cell-value" id="cellFeels">--°</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE ELEMENT: CONFIDENCE + RISK GAUGE -->
+  <section class="gauge-section" id="gaugeSection">
+    <div class="gauge-wrap">
+      <svg viewBox="0 0 220 130" class="gauge-svg" id="gaugeSvg">
+        <path class="gauge-track" d="M 15 115 A 95 95 0 0 1 205 115" />
+        <path class="gauge-fill" id="gaugeFill" d="M 15 115 A 95 95 0 0 1 205 115" />
+        <line class="gauge-needle" id="gaugeNeedle" x1="110" y1="115" x2="110" y2="30" />
+        <circle class="gauge-hub" cx="110" cy="115" r="6" />
+      </svg>
+      <div class="gauge-readout">
+        <span class="gauge-value" id="gaugeValue">--%</span>
+        <span class="gauge-label">AI Confidence Score</span>
+      </div>
+    </div>
+    <div class="gauge-explain">
+      <p class="eyebrow">Explainable AI</p>
+      <h2>Why the model believes this forecast</h2>
+      <p id="explainText" class="explain-text">Search a location to generate a confidence score, derived from data recency, station density, and short-range model agreement.</p>
+      <div class="risk-badge" id="riskBadge">
+        <span class="risk-dot"></span>
+        <span id="riskLabel">RISK LEVEL: —</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- USE CASE 2: PERSONALIZED RECOMMENDATION -->
+  <section class="panel" id="recoPanel">
+    <p class="eyebrow">02 — Personalized Weather Risk &amp; Recommendation</p>
+    <h2>Tell Aether who you are today.</h2>
+    <div class="role-row" id="roleRow">
+      <button class="role-btn active" data-role="student">Student</button>
+      <button class="role-btn" data-role="farmer">Farmer</button>
+      <button class="role-btn" data-role="commuter">Commuter</button>
+      <button class="role-btn" data-role="organizer">Event Organizer</button>
+    </div>
+    <div class="reco-card">
+      <div class="reco-risk" id="recoRisk">RISK: —</div>
+      <p class="reco-text" id="recoText">Your personalized recommendation will appear here once a location is loaded.</p>
+      <ul class="reco-tips" id="recoTips"></ul>
+    </div>
+  </section>
+
+  <!-- USE CASE 3: DISASTER EARLY WARNING -->
+  <section class="panel warning-panel" id="warningPanel">
+    <p class="eyebrow">03 — AI Disaster Early Warning &amp; Decision Support</p>
+    <h2>Threshold monitoring, in the open.</h2>
+    <div class="threshold-grid" id="thresholdGrid">
+      <div class="threshold-card" data-key="rain">
+        <span class="t-label">Heavy Rainfall</span>
+        <span class="t-value" id="tRain">--%</span>
+        <div class="t-bar"><div class="t-bar-fill" id="tRainBar"></div></div>
+      </div>
+      <div class="threshold-card" data-key="wind">
+        <span class="t-label">Storm Wind</span>
+        <span class="t-value" id="tWind">-- km/h</span>
+        <div class="t-bar"><div class="t-bar-fill" id="tWindBar"></div></div>
+      </div>
+      <div class="threshold-card" data-key="heat">
+        <span class="t-label">Heat Stress</span>
+        <span class="t-value" id="tHeat">--°</span>
+        <div class="t-bar"><div class="t-bar-fill" id="tHeatBar"></div></div>
+      </div>
+    </div>
+    <div class="alert-strip" id="alertStrip">
+      <span id="alertText">Monitoring idle — no location loaded.</span>
+    </div>
+  </section>
+
+  <!-- 5-DAY OUTLOOK -->
+  <section class="panel">
+    <p class="eyebrow">Outlook</p>
+    <h2>Next five days</h2>
+    <div class="forecast-strip" id="forecastStrip"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span>Weather forecasting</span>
+  <span></span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
