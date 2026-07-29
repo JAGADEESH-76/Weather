@@ -1,9 +1,4 @@
-/* =========================================================================
-   AETHER — AI Hyperlocal Weather & Decision Support
-   100% client-side. Weather + geocoding via Open-Meteo (free, no API key,
-   CORS-enabled), which stands in for the GraphCast / NVIDIA Earth-2 style
-   AI forecast engine described in the use cases.
-   ========================================================================= */
+
 
 const GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const FORECAST_URL = "https://api.open-meteo.com/v1/forecast";
