@@ -366,6 +366,7 @@ function renderForecastStrip(data){
 }
 
 /* =========================================================================
-   INITIAL STATE — try a sensible default (Chennai) so the page isn't empty
+   INITIAL — try a sensible default (Chennai) so the page isn't empty
    ========================================================================= */
-loadWeather(13.0827, 80.2707, "Chennai, Tamil Nadu");
+loadWeather(13.0827, 80.2707, "chennai, Tamil Nadu")
+//status
