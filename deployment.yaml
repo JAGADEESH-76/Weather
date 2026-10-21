@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: atmospredict
-          image:divakar2006/atmospredict:latest
+          image: divakar2006/atmospredict:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
